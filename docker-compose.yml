@@ -1,0 +1,22 @@
+version: "3.1"
+
+services:
+  ourboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 1337:1337
+    environment:
+      # DATABASE_URL: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/r-board"
+      DATABASE_URL: "postgres://r-board:secret@db:5432/r-board"
+    links:
+      - db
+  db:
+    image: postgres:12
+    restart: always
+    ports:
+      - 13338:5432
+    environment:
+      POSTGRES_USER: r-board
+      POSTGRES_PASSWORD: secret
