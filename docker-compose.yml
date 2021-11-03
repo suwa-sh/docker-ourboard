@@ -8,6 +8,7 @@ services:
     ports:
       - 1337:1337
     environment:
+      # https://github.com/raimohanska/ourboard#hosting
       # DATABASE_URL: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/r-board"
       DATABASE_URL: "postgres://r-board:secret@db:5432/r-board"
     links:
