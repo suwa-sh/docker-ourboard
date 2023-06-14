@@ -8,6 +8,7 @@ build: ## docker-compose build
 
 up: ## docker-compose up
 	docker-compose up -d
+	open http://localhost:1337/
 
 down: ## docker-compose down
 	docker-compose down
