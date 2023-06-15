@@ -6,11 +6,13 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - 1337:1337
+      - ${HOST_PORT}:1337
     environment:
       # https://github.com/raimohanska/ourboard#hosting
-      # DATABASE_URL: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/r-board"
-      DATABASE_URL: "postgres://r-board:secret@db:5432/r-board"
+      DATABASE_URL: "postgres://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_DATABASE}"
+      WS_HOST_DEFAULT: ${HOST_IP}:${HOST_PORT}
+      WS_HOST_LOCAL: ${HOST_IP}:${HOST_PORT}
+      WS_PROTOCOL: ws
     links:
       - db
     depends_on:
@@ -22,26 +24,19 @@ services:
     ports:
       - 15432:5432
     environment:
-      POSTGRES_USER: r-board
-      POSTGRES_PASSWORD: secret
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
-      - "$PWD/container_data/pgdocker/13/data/:/var/lib/postgresql/data:Z"
+      - "$PWD/container_data/postgres/13/data/:/var/lib/postgresql/data:Z"
     healthcheck:
       test:
-        [
-          "CMD",
-          "pg_isready",
-          "-U",
-          "r-board",
-          "-d",
-          "db"
-        ]
+        [ "CMD", "pg_isready", "-U", "${DB_USER}", "-d", "${DB_DATABASE}" ]
       interval: 5s
       retries: 20
   pgweb:
-    image: sosedoff/pgweb:0.12.0
+    image: sosedoff/pgweb:0.14.0
     environment:
-      DATABASE_URL: "postgres://r-board:secret@db:5432/r-board?sslmode=disable"
+      DATABASE_URL: "postgres://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_DATABASE}?sslmode=disable"
     ports:
       - 8081:8081
     depends_on:

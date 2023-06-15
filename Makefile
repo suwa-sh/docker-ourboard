@@ -3,21 +3,24 @@
 
 defaut: help
 
-build: ## docker-compose build
-	docker-compose build
+build: ## docker compose build
+	docker compose build
 
-up: ## docker-compose up
-	docker-compose up -d
-	open http://localhost:1337/
+up: ## docker compose up
+	./scripts/update_dot_env.sh
+	docker compose up -d
+	docker compose ps -a
+	open http://`./scripts/host_ip.sh`:1337/
+	open http://`./scripts/host_ip.sh`:8081/
 
-down: ## docker-compose down
-	docker-compose down
+down: ## docker compose down
+	docker compose down
 
 clean: down ## clean up container data
 	rm -fr ./container_data
 
 logs: ## show compose logs
-	docker-compose logs
+	docker compose logs
 
 docker-build:
 	docker build -t ourboard .
