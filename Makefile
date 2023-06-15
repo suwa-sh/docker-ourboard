@@ -13,6 +13,9 @@ up: ## docker-compose up
 down: ## docker-compose down
 	docker-compose down
 
+clean: down ## clean up container data
+	rm -fr ./container_data
+
 logs: ## show compose logs
 	docker-compose logs
 

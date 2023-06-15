@@ -13,11 +13,40 @@ services:
       DATABASE_URL: "postgres://r-board:secret@db:5432/r-board"
     links:
       - db
+    depends_on:
+      db:
+        condition: service_healthy
   db:
-    image: postgres:12
+    image: postgres:13
     restart: always
     ports:
-      - 13338:5432
+      - 15432:5432
     environment:
       POSTGRES_USER: r-board
       POSTGRES_PASSWORD: secret
+    volumes:
+      - "$PWD/container_data/pgdocker/13/data/:/var/lib/postgresql/data:Z"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "pg_isready",
+          "-U",
+          "r-board",
+          "-d",
+          "db"
+        ]
+      interval: 5s
+      retries: 20
+  pgweb:
+    image: sosedoff/pgweb:0.12.0
+    environment:
+      DATABASE_URL: "postgres://r-board:secret@db:5432/r-board?sslmode=disable"
+    ports:
+      - 8081:8081
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "nc", "-vz", "localhost", "8081" ]
+      interval: 5s
