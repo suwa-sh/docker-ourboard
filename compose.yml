@@ -28,6 +28,7 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - "$PWD/container_data/postgres/13/data/:/var/lib/postgresql/data:Z"
+      - "$PWD/data/db/:/tmp/data"
     healthcheck:
       test:
         [ "CMD", "pg_isready", "-U", "${DB_USER}", "-d", "${DB_DATABASE}" ]

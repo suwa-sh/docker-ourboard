@@ -4,4 +4,17 @@ docker compose sample for [ourboard](https://github.com/raimohanska/ourboard) sh
 
 ## How to use
 
-1. `make`
+```shell
+# start services
+make up
+
+# stop services
+make down
+```
+
+## Backup and Restore
+
+```shell
+make backup
+make restore_latest
+```

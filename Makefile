@@ -22,6 +22,12 @@ clean: down ## clean up container data
 logs: ## show compose logs
 	docker compose logs
 
+backup: ## db data backup
+	docker compose exec db /tmp/data/scripts/backup.sh
+
+restore_latest: ## db data restore latest file
+	docker compose exec db /tmp/data/scripts/restore.sh
+
 docker-build:
 	docker build -t ourboard .
 
